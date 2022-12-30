@@ -23,8 +23,11 @@ class SelectOptionNotifier extends ValueNotifier {
 }
 
 class SelectOptionWidget extends StatelessWidget {
+  final String? title;
   final List<String> options;
-  const SelectOptionWidget({super.key, this.options = const []});
+  final List<bool> disabled;
+  final List values;
+  const SelectOptionWidget({super.key, this.title, this.options = const [], this.values = const [], this.disabled = const []});
 
   @override
   Widget build(BuildContext context) {
@@ -41,13 +44,17 @@ class SelectOptionWidget extends StatelessWidget {
           return Col(
               children: List.generate(list.length, (i) {
             String option = list[i];
+            bool isDisabled = disabled.length > i && !disabled[i];
 
             return InkW(
-              onTap: () {
-                context.pop(option);
-              },
+              onTap: isDisabled
+                  ? null
+                  : () {
+                      context.pop({'option': option, 'value': values.length > i ? values[i] : null});
+                    },
               padding: Ei.all(20),
-              child: Container(
+              child: Opacity(
+                opacity: isDisabled ? .5 : 1,
                 child: Row(
                   children: [
                     Text(option),
@@ -67,10 +74,12 @@ class SelectOptionWidget extends StatelessWidget {
             child: Row(
               mainAxisAlignment: Maa.spaceBetween,
               children: [
-                Textr(
-                  'Pilih Sesuatu',
-                  style: Gfont.fs20,
-                  margin: Ei.only(l: 20),
+                Flexible(
+                  child: Textr(
+                    title ?? 'Pilih Sesuatu',
+                    style: Gfont.fs20,
+                    margin: Ei.sym(h: 20),
+                  ),
                 ),
                 Touch(onTap: () => context.pop(), child: Iconr(La.times, color: Colors.black54, size: 22, padding: Ei.all(20)))
               ],
@@ -96,7 +105,7 @@ class SelectOptionWidget extends StatelessWidget {
     );
   }
 
-  open([Function(String? value)? onSelect]) async {
-    Get.bottomSheet(this, isScrollControlled: true).then((value) => onSelect?.call(value));
+  open([Function(String? option, dynamic value)? onSelect]) async {
+    Get.bottomSheet(this, isScrollControlled: true).then((value) => onSelect?.call(value['option'], value['value']));
   }
 }

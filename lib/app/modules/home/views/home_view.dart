@@ -83,12 +83,47 @@ class HomeView extends GetView<HomeController> {
                     // TextInput.dropDownsearch();
 
                     // Usage:
-                    // 1. Prepate your data
-                    List<String> options = ['Apple', 'Bebek', 'Ayam', 'Bubur', 'Nasi Goreng', 'Capuchino', 'Mango', 'Banana', 'Pizza', 'Iga Bakar'];
+                    // Misalkan kamu punya data seperti ini yang kamu dapat dari response api,
+                    // Atau kamu punya data berupa List<NamaModel>
+                    // List<Map> data = [
+                    //   { 'id': 1, 'item': 'Apple', 'enable': true },
+                    //   { 'id': 2, 'item': 'Bebek', 'enable': true },
+                    //   { 'id': 3, 'item': 'Ayam', 'enable': false },
+                    //   { 'id': 4, 'item': 'Bubur', 'enable': true },
+                    //   { 'id': 5, 'item': 'Nasi Goreng', 'enable': false },
+                    //   { 'id': 6, 'item': 'Capuchino', 'enable': true },
+                    //   { 'id': 7, 'item': 'Mango', 'enable': false },
+                    //   { 'id': 8, 'item': 'Banana', 'enable': true },
+                    //   { 'id': 9, 'item': 'Pizza', 'enable': true },
+                    //   { 'id': 10, 'item': 'Iga Bakar', 'enable': true },
+                    // ];
+
+                    List<ItemModel> data = [
+                      ItemModel(id: 1, item: 'Apple', enable: true),
+                      ItemModel(id: 2, item: 'Bebek', enable: true),
+                      ItemModel(id: 3, item: 'Ayam', enable: false),
+                      ItemModel(id: 4, item: 'Bubur', enable: true),
+                      ItemModel(id: 5, item: 'Nasi Goreng', enable: false),
+                      ItemModel(id: 6, item: 'Capuchino', enable: false),
+                      ItemModel(id: 7, item: 'Mango', enable: true),
+                      ItemModel(id: 8, item: 'Pizza', enable: true),
+                    ];
+
+                    // 1. Get option yang ingin kamu tampilkan
+                    List<String> options = [...data.map((e) => e.item!)];
+
+                    // 2. Get value (unique)
+                    List<int> values = [...data.map((e) => e.id!)];
+
+                    // 3. Set enable/disabled option
+                    List<bool> disabled = [...data.map((e) => e.enable ?? false)];
 
                     // 2. Call widget
-                    SelectOptionWidget(options: options).open((String? value) {
-                      logg(value);
+                    SelectOptionWidget(options: options, values: values, disabled: disabled).open((String? o, v) {
+                      ItemModel? result = data.firstWhere((e) => e.id == v, orElse: () => ItemModel());
+                      if (result.id != null) {
+                        // Do something!
+                      }
                     });
                   })),
               SizedBox(height: 100),
@@ -98,4 +133,12 @@ class HomeView extends GetView<HomeController> {
       ),
     );
   }
+}
+
+class ItemModel {
+  final int? id;
+  final String? item;
+  final bool? enable;
+
+  ItemModel({this.id, this.item, this.enable});
 }
