@@ -119,8 +119,8 @@ class HomeView extends GetView<HomeController> {
                     // 2. Get value (unique)
                     List<int> values = [...data.map((e) => e.id!)];
 
-                    // 3. Set enable/disabled option
-                    List<bool> disabled = [...data.map((e) => e.enable ?? false)];
+                    // 3. get id data yang disabled
+                    List disabled = [...data.where((e) => e.enable == false)].map((e) => e.id).toList();
 
                     // 4. Call widget
                     SelectOptionWidget(
@@ -133,6 +133,7 @@ class HomeView extends GetView<HomeController> {
                       ItemModel? result = data.firstWhere((e) => e.id == v, orElse: () => ItemModel());
                       if (result.id != null) {
                         // Do something!
+                        logg(result.item);
                       }
                     });
                   })),

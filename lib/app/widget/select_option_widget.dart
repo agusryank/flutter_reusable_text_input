@@ -32,11 +32,11 @@ class SelectOptionNotifier extends ValueNotifier {
 class SelectOptionWidget extends StatelessWidget {
   final String? title;
   final List<String> options;
-  final List<bool> disabled;
-  final List values;
+  final List disabled;
+  final List<dynamic>? values;
   final int filterDelay, viewOnly;
   const SelectOptionWidget(
-      {super.key, this.title, this.options = const [], this.values = const [], this.disabled = const [], this.filterDelay = 350, this.viewOnly = 25});
+      {super.key, this.title, this.options = const [], this.values, this.disabled = const [], this.filterDelay = 350, this.viewOnly = 25});
 
   @override
   Widget build(BuildContext context) {
@@ -53,13 +53,20 @@ class SelectOptionWidget extends StatelessWidget {
           return Col(
               children: List.generate(list.length, (i) {
             String option = list[i];
-            bool isDisabled = disabled.length > i && !disabled[i];
+            List values = this.values ?? [];
+
+            int io = options.indexOf(option);
+            bool isDisabled = this.values == null
+                ? disabled.contains(option)
+                : (io < 0)
+                    ? false
+                    : disabled.contains(values[io]);
 
             return InkW(
               onTap: isDisabled
                   ? null
                   : () {
-                      context.pop({'option': option, 'value': values.length > i ? values[i] : null});
+                      context.pop({'option': option, 'value': io < 0 || this.values == null ? null : values[io]});
                     },
               child: Container(
                 padding: Ei.all(20),
