@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
@@ -6,19 +8,24 @@ import 'package:reusable_text_input/app/theme/text_theme.dart';
 import 'package:reusable_text_input/app/widget/custom_widget.dart';
 
 class SelectOptionNotifier extends ValueNotifier {
-  SelectOptionNotifier(String super.value);
+  SelectOptionNotifier(int super.filterDelay);
 
   String keyword = '';
+  Timer? timer;
 
   void filter(String value) {
     keyword = value;
-    // logg(keyword);
-    notifyListeners();
+
+    timer?.cancel();
+    timer = Timer(Duration(milliseconds: this.value), () {
+      notifyListeners();
+    });
   }
 
   @override
   void dispose() {
     super.dispose();
+    timer?.cancel();
   }
 }
 
@@ -27,11 +34,13 @@ class SelectOptionWidget extends StatelessWidget {
   final List<String> options;
   final List<bool> disabled;
   final List values;
-  const SelectOptionWidget({super.key, this.title, this.options = const [], this.values = const [], this.disabled = const []});
+  final int filterDelay, viewOnly;
+  const SelectOptionWidget(
+      {super.key, this.title, this.options = const [], this.values = const [], this.disabled = const [], this.filterDelay = 350, this.viewOnly = 25});
 
   @override
   Widget build(BuildContext context) {
-    SelectOptionNotifier notifier = SelectOptionNotifier('');
+    SelectOptionNotifier notifier = SelectOptionNotifier(filterDelay);
 
     Widget childList = ValueListenableBuilder(
         valueListenable: notifier,
@@ -39,7 +48,7 @@ class SelectOptionWidget extends StatelessWidget {
           List<String> list = options;
           String keyword = notifier.keyword;
 
-          list = options.where((e) => e.toLowerCase().contains(keyword.toLowerCase())).toList();
+          list = options.where((e) => e.toLowerCase().contains(keyword.toLowerCase())).toList().take(viewOnly).toList();
 
           return Col(
               children: List.generate(list.length, (i) {
@@ -52,13 +61,16 @@ class SelectOptionWidget extends StatelessWidget {
                   : () {
                       context.pop({'option': option, 'value': values.length > i ? values[i] : null});
                     },
-              padding: Ei.all(20),
-              child: Opacity(
-                opacity: isDisabled ? .5 : 1,
-                child: Row(
-                  children: [
-                    Text(option),
-                  ],
+              child: Container(
+                padding: Ei.all(20),
+                decoration: BoxDecoration(border: Br.only(['t'], except: i == 0)),
+                child: Opacity(
+                  opacity: isDisabled ? .5 : 1,
+                  child: Row(
+                    children: [
+                      Text(option),
+                    ],
+                  ),
                 ),
               ),
             );

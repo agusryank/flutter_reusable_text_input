@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mixins/mixins.dart';
@@ -107,6 +106,11 @@ class HomeView extends GetView<HomeController> {
                       ItemModel(id: 6, item: 'Capuchino', enable: false),
                       ItemModel(id: 7, item: 'Mango', enable: true),
                       ItemModel(id: 8, item: 'Pizza', enable: true),
+                      ItemModel(id: 9, item: 'Bakso Sapi', enable: true),
+                      ItemModel(id: 10, item: 'Telor Asin', enable: true),
+                      ItemModel(id: 11, item: 'Udang Saus Tiram', enable: false),
+                      ItemModel(id: 12, item: 'Ayam Bakar Madu', enable: false),
+                      ItemModel(id: 13, item: 'Iga Sapi Bakar', enable: true),
                     ];
 
                     // 1. Get option yang ingin kamu tampilkan
@@ -118,8 +122,14 @@ class HomeView extends GetView<HomeController> {
                     // 3. Set enable/disabled option
                     List<bool> disabled = [...data.map((e) => e.enable ?? false)];
 
-                    // 2. Call widget
-                    SelectOptionWidget(options: options, values: values, disabled: disabled).open((String? o, v) {
+                    // 4. Call widget
+                    SelectOptionWidget(
+                      options: options,
+                      values: values,
+                      disabled: disabled,
+                      filterDelay: 500,
+                      viewOnly: 5,
+                    ).open((String? o, v) {
                       ItemModel? result = data.firstWhere((e) => e.id == v, orElse: () => ItemModel());
                       if (result.id != null) {
                         // Do something!
