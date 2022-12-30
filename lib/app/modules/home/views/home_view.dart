@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-import 'package:reusable_text_input/app/theme/text_theme.dart';
-import 'package:reusable_text_input/app/widget/custom_widget.dart';
 import 'package:mixins/mixins.dart';
+import 'package:reusable_text_input/app/widget/custom_widget.dart';
+import 'package:reusable_text_input/app/widget/select_option_widget.dart';
+
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
@@ -24,7 +24,7 @@ class HomeView extends GetView<HomeController> {
               // Date Picker
               TextInput(
                 label: 'Date Picker',
-                backgroundColor: C.black1,
+                backgroundColor: Colors.black12,
                 icon: Icons.calendar_today,
                 hint: 'Select Date',
                 autofocus: false,
@@ -38,7 +38,7 @@ class HomeView extends GetView<HomeController> {
               // Time Picker
               TextInput(
                 label: 'Time Picker',
-                backgroundColor: C.black1,
+                backgroundColor: Colors.black12,
                 icon: Icons.watch_later,
                 hint: 'Select Date',
                 colorIcon: Colors.black,
@@ -51,7 +51,7 @@ class HomeView extends GetView<HomeController> {
               // TextInput
               TextInput(
                 label: 'Text Input',
-                backgroundColor: C.black1,
+                backgroundColor: Colors.black12,
                 icon: Icons.file_copy,
                 hint: 'Select Date',
                 colorIcon: Colors.black,
@@ -61,7 +61,7 @@ class HomeView extends GetView<HomeController> {
 
               TextInput(
                   label: 'DropDown',
-                  backgroundColor: C.black1,
+                  backgroundColor: Colors.black12,
                   icon: Icons.arrow_drop_down,
                   hint: 'Select Date',
                   colorIcon: Colors.black,
@@ -75,12 +75,21 @@ class HomeView extends GetView<HomeController> {
                   })),
               TextInput(
                   label: 'DropDown Search',
-                  backgroundColor: C.black1,
+                  backgroundColor: Colors.black12,
                   icon: Icons.arrow_drop_down,
                   hint: 'Select Date',
                   colorIcon: Colors.black,
                   onSelect: ((val) {
-                    TextInput.dropDownsearch();
+                    // TextInput.dropDownsearch();
+
+                    // Usage:
+                    // 1. Prepate your data
+                    List<String> options = ['Apple', 'Bebek', 'Ayam', 'Bubur', 'Nasi Goreng', 'Capuchino', 'Mango', 'Banana', 'Pizza', 'Iga Bakar'];
+
+                    // 2. Call widget
+                    SelectOptionWidget(options: options).open((String? value) {
+                      logg(value);
+                    });
                   })),
               SizedBox(height: 100),
             ],
