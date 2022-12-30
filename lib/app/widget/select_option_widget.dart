@@ -106,6 +106,6 @@ class SelectOptionWidget extends StatelessWidget {
   }
 
   open([Function(String? option, dynamic value)? onSelect]) async {
-    Get.bottomSheet(this, isScrollControlled: true).then((value) => onSelect?.call(value['option'], value['value']));
+    Get.bottomSheet(this, isScrollControlled: true).then((value) => onSelect?.call(value?['option'], value?['value']));
   }
 }
