@@ -16,7 +16,13 @@ class TextInputPickerWidget extends StatelessWidget {
   final Function(Map)? onSelect;
   final String? initialValue;
 
-  const TextInputPickerWidget({Key? key, this.options = const [], this.values, this.onSelect, this.initialValue}) : super(key: key);
+  const TextInputPickerWidget(
+      {Key? key,
+      this.options = const [],
+      this.values,
+      this.onSelect,
+      this.initialValue})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +31,10 @@ class TextInputPickerWidget extends StatelessWidget {
 
     Map result = values == null
         ? {'option': options.isEmpty ? null : options[i]}
-        : {'option': options.isEmpty ? null : options[i], 'value': values == null || values!.isEmpty ? null : values![i]};
+        : {
+            'option': options.isEmpty ? null : options[i],
+            'value': values == null || values!.isEmpty ? null : values![i]
+          };
 
     return Padding(
       padding: const EdgeInsets.all(15),
@@ -50,22 +59,28 @@ class TextInputPickerWidget extends StatelessWidget {
                       magnification: 1,
                       useMagnifier: true,
                       itemExtent: 40,
-                      scrollController: FixedExtentScrollController(initialItem: i),
+                      scrollController:
+                          FixedExtentScrollController(initialItem: i),
                       // This is called when selected item is changed.
                       onSelectedItemChanged: (int selectedItem) {
                         if (onSelect != null) {
                           if (values != null) {
-                            result = {'option': options[selectedItem], 'value': values![selectedItem]};
+                            result = {
+                              'option': options[selectedItem],
+                              'value': values![selectedItem]
+                            };
                           } else {
                             result = {'option': options[selectedItem]};
                           }
                         }
                       },
-                      children: List<Widget>.generate(options.length, (int index) {
+                      children:
+                          List<Widget>.generate(options.length, (int index) {
                         return Center(
                           child: Text(
                             options[index],
-                            style: gfont.copyWith(fontSize: 17, color: Colors.white),
+                            style: gfont.copyWith(
+                                fontSize: 17, color: Colors.white),
                           ),
                         );
                       })),
@@ -80,7 +95,8 @@ class TextInputPickerWidget extends StatelessWidget {
                     margin: Ei.only(b: 15),
                     color: Colors.yellow.withOpacity(.1),
                     padding: Ei.sym(v: 10, h: 45),
-                    child: Text('Confirm', style: Gfont.bold.copyWith(color: Colors.yellow)))
+                    child: Text('Confirm',
+                        style: Gfont.bold.copyWith(color: Colors.yellow)))
               ],
             ),
           ),
@@ -97,7 +113,14 @@ class CustomDropDown extends StatelessWidget {
   final String? initialValue;
   final List? values;
 
-  const CustomDropDown({Key? key, this.hint, this.values, this.onSelected, this.options = const [], this.initialValue}) : super(key: key);
+  const CustomDropDown(
+      {Key? key,
+      this.hint,
+      this.values,
+      this.onSelected,
+      this.options = const [],
+      this.initialValue})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +129,10 @@ class CustomDropDown extends StatelessWidget {
 
     Map result = values == null
         ? {'option': options.isEmpty ? null : options[i]}
-        : {'option': options.isEmpty ? null : options[i], 'value': values == null || values!.isEmpty ? null : values![i]};
+        : {
+            'option': options.isEmpty ? null : options[i],
+            'value': values == null || values!.isEmpty ? null : values![i]
+          };
     return SingleChildScrollView(
       child: InkW(
         onTap: (() {
@@ -119,8 +145,10 @@ class CustomDropDown extends StatelessWidget {
         }),
         child: Container(
           padding: Ei.all(20),
-          decoration:
-              BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10), border: Border.all(color: Colors.black12.withOpacity(.3))),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.black12.withOpacity(.3))),
           child: Column(
             children: options.map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
@@ -177,7 +205,9 @@ class CustomDropDownSearch extends StatelessWidget {
               : None(),
           Container(
             padding: Ei.only(l: 8),
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), border: Br.all(Colors.black)),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Br.all(Colors.black)),
             child: DropdownSearch<Map<String, dynamic>>(
               enabled: enabled,
               dropdownButtonProps: DropdownButtonProps(
@@ -194,7 +224,8 @@ class CustomDropDownSearch extends StatelessWidget {
                 searchFieldProps: TextFieldProps(
                   decoration: InputDecoration(
                     hintText: hintText ?? 'Ketik Disini Untuk Mencari',
-                    hintStyle: gfont.copyWith(fontSize: 14, color: Colors.black12),
+                    hintStyle:
+                        gfont.copyWith(fontSize: 14, color: Colors.black12),
                     contentPadding: Ei.only(l: 10, r: 10, t: 10, b: 10),
                   ),
                 ),
@@ -226,7 +257,7 @@ class CustomDropDownSearch extends StatelessWidget {
 class InputControlListener extends GetxController {}
 
 class TextInputTransparent extends StatelessWidget {
-  final String? hint;
+  final String? hint, initialValue;
   final TextInputType? keyboard;
   final TextInputAction? inputAction;
   final Function(String)? onSubmit, onChanged;
@@ -250,6 +281,7 @@ class TextInputTransparent extends StatelessWidget {
       this.showMaxLength: false,
       this.node,
       this.controller,
+      this.initialValue,
       this.textAlign,
       this.enabled: true,
       this.maxLength: 255,
@@ -261,12 +293,13 @@ class TextInputTransparent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget textField = TextField(
+    Widget textField = TextFormField(
       style: textStyle ?? Gfont.black7,
       keyboardType: keyboard,
       textInputAction: inputAction,
-      onSubmitted: onSubmit,
+      onFieldSubmitted: onSubmit,
       onChanged: onChanged,
+      initialValue: initialValue,
       autofocus: autofocus,
       focusNode: node,
       obscureText: obsecure,
@@ -275,11 +308,13 @@ class TextInputTransparent extends StatelessWidget {
       controller: controller,
       maxLines: maxLines == null ? 1 : maxLines,
       minLines: 1,
-      inputFormatters: [LengthLimitingTextInputFormatter(maxLength)]..addAll(formatters),
+      inputFormatters: [LengthLimitingTextInputFormatter(maxLength)]
+        ..addAll(formatters),
       decoration: InputDecoration(
         contentPadding: contentPadding ?? Ei.sym(v: 13.5),
         hintText: hint,
-        hintStyle: hintStyle ?? Gfont.black.copyWith(fontSize: 15, color: Colors.black38),
+        hintStyle: hintStyle ??
+            Gfont.black.copyWith(fontSize: 15, color: Colors.black38),
         border: InputBorder.none,
         focusedBorder: InputBorder.none,
         enabledBorder: InputBorder.none,
@@ -294,6 +329,7 @@ class TextInputTransparent extends StatelessWidget {
 
 class TextInput extends StatelessWidget {
   final String label;
+  final String? initialValue;
   final IconData? icon;
   final String? hint;
   final bool obsecure, autofocus, enabled;
@@ -320,6 +356,7 @@ class TextInput extends StatelessWidget {
       this.keyboardType,
       this.maxLength = 50,
       this.node,
+      this.initialValue,
       this.colorIcon,
       this.enabled = true,
       this.borderRadius,
@@ -354,12 +391,17 @@ class TextInput extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Row(children: [
-                        icon == null ? None() : Iconr(icon!, color: colorIcon, margin: Ei.only(r: 15, b: 15)),
+                        icon == null
+                            ? None()
+                            : Iconr(icon!,
+                                color: colorIcon,
+                                margin: Ei.only(r: 15, b: 15)),
                         Expanded(
                             child: TextInputTransparent(
                           hint: hint,
                           keyboard: keyboardType ?? Tit.text,
                           maxLength: maxLength,
+                          initialValue: initialValue,
                           node: node,
                           enabled: enabled && onSelect == null,
                           obsecure: obsecure,
@@ -393,10 +435,12 @@ class TextInput extends StatelessWidget {
   // ===========================================================
 
   /// top left-right radius
-  static tlrRadius([double value = 10]) => BorderRadius.only(topLeft: Radius.circular(value), topRight: Radius.circular(value));
+  static tlrRadius([double value = 10]) => BorderRadius.only(
+      topLeft: Radius.circular(value), topRight: Radius.circular(value));
 
   /// bottom left-right radius
-  static blrRadius([double value = 10]) => BorderRadius.only(bottomLeft: Radius.circular(value), bottomRight: Radius.circular(value));
+  static blrRadius([double value = 10]) => BorderRadius.only(
+      bottomLeft: Radius.circular(value), bottomRight: Radius.circular(value));
 
   // ===========================================================
   // easy way to open cupertino picker
@@ -416,28 +460,49 @@ class TextInput extends StatelessWidget {
   /// // onSelect property return a map with key 'option' and value 'value'
   /// ```
 
-  static picker({String? initialValue, List<String> options = const [], List? values, Function(Map)? onSelect}) {
+  static picker(
+      {String? initialValue,
+      List<String> options = const [],
+      List? values,
+      Function(Map)? onSelect}) {
     ;
 
     Get.bottomSheet(ScrollConfiguration(
-        behavior: NoScrollGlow(), child: TextInputPickerWidget(initialValue: initialValue, options: options, values: values, onSelect: onSelect)));
+        behavior: NoScrollGlow(),
+        child: TextInputPickerWidget(
+            initialValue: initialValue,
+            options: options,
+            values: values,
+            onSelect: onSelect)));
   }
 
-  static dropDownPicker({String? initialValue, List<String> options = const [], List? values, dynamic Function(Map<dynamic, dynamic>)? onSelect}) {
+  static dropDownPicker(
+      {String? initialValue,
+      List<String> options = const [],
+      List? values,
+      dynamic Function(Map<dynamic, dynamic>)? onSelect}) {
     ;
 
-    Get.bottomSheet(CustomDropDown(initialValue: initialValue, options: options, onSelected: onSelect));
+    Get.bottomSheet(CustomDropDown(
+        initialValue: initialValue, options: options, onSelected: onSelect));
   }
 
   static dropDownsearch(
-      {String? initialValue, List<Map<String, dynamic>> options = const [], List? values, dynamic Function(Map<dynamic, dynamic>)? onSelect}) {
+      {String? initialValue,
+      List<Map<String, dynamic>> options = const [],
+      List? values,
+      dynamic Function(Map<dynamic, dynamic>)? onSelect}) {
     Get.bottomSheet(CustomDropDownSearch(
       item: options,
     ));
   }
 
   static datePicker(context,
-      {DateTime? initialDate, DateTime? firstDate, DateTime? lastDate, DatePickerEntryMode? entryMode, Function(DateTime)? onSelect}) async {
+      {DateTime? initialDate,
+      DateTime? firstDate,
+      DateTime? lastDate,
+      DatePickerEntryMode? entryMode,
+      Function(DateTime)? onSelect}) async {
     try {
       showDatePicker(
           context: context,
@@ -448,7 +513,9 @@ class TextInput extends StatelessWidget {
           builder: (context, child) {
             return Theme(
                 data: Theme.of(context).copyWith(
-                  textTheme: TextTheme(bodyText1: TextStyle(color: primaryColor), headline4: TextStyle(fontSize: 30, color: primaryColor)),
+                  textTheme: TextTheme(
+                      bodyText1: TextStyle(color: primaryColor),
+                      headline4: TextStyle(fontSize: 30, color: primaryColor)),
                   colorScheme: ColorScheme.light(primary: primaryColor),
                 ),
                 child: child!);
@@ -462,7 +529,8 @@ class TextInput extends StatelessWidget {
     }
   }
 
-  static timePicker(context, {TimeOfDay? initialTime, Function(TimeOfDay)? onSelect}) async {
+  static timePicker(context,
+      {TimeOfDay? initialTime, Function(TimeOfDay)? onSelect}) async {
     try {
       await showTimePicker(
           context: context,
@@ -476,7 +544,8 @@ class TextInput extends StatelessWidget {
                   surface: Colors.white,
                   onSurface: Colors.black,
                 ),
-                buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                buttonTheme:
+                    ButtonThemeData(textTheme: ButtonTextTheme.primary),
               ),
               child: child!,
             );
@@ -490,7 +559,11 @@ class TextInput extends StatelessWidget {
     }
   }
 
-  static Widget radio({String? label, List options = const [], TextEditingController? controller, Function(Object?)? onChanged}) {
+  static Widget radio(
+      {String? label,
+      List options = const [],
+      TextEditingController? controller,
+      Function(Object?)? onChanged}) {
     return Container(
       width: Get.width,
       child: Col(
@@ -518,8 +591,11 @@ class TextInput extends StatelessWidget {
                         Radio(
                             value: option,
                             groupValue: controller?.text,
-                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            visualDensity: VisualDensity(horizontal: VisualDensity.minimumDensity, vertical: VisualDensity.minimumDensity + 3),
+                            materialTapTargetSize:
+                                MaterialTapTargetSize.shrinkWrap,
+                            visualDensity: VisualDensity(
+                                horizontal: VisualDensity.minimumDensity,
+                                vertical: VisualDensity.minimumDensity + 3),
                             activeColor: Colors.blue,
                             onChanged: onChanged),
                         Textr(
@@ -545,7 +621,9 @@ class TextInputGroup extends StatelessWidget {
   final Textr? label;
   final IconData? icon;
 
-  const TextInputGroup({Key? key, this.label, this.children = const [], this.margin, this.icon}) : super(key: key);
+  const TextInputGroup(
+      {Key? key, this.label, this.children = const [], this.margin, this.icon})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -559,7 +637,9 @@ class TextInputGroup extends StatelessWidget {
                   margin: Ei.only(b: 15),
                   child: Row(
                     children: [
-                      icon == null ? None() : Iconr(icon!, margin: Ei.only(r: 15)),
+                      icon == null
+                          ? None()
+                          : Iconr(icon!, margin: Ei.only(r: 15)),
                       label!,
                     ],
                   ),

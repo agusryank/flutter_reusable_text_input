@@ -72,71 +72,104 @@ class HomeView extends GetView<HomeController> {
                       }),
                     );
                   })),
-              TextInput(
-                  label: 'DropDown Search',
-                  backgroundColor: Colors.black12,
-                  icon: Icons.arrow_drop_down,
-                  hint: 'Select Date',
-                  colorIcon: Colors.black,
-                  onSelect: ((val) {
-                    // TextInput.dropDownsearch();
+              ListView.builder(
+                shrinkWrap: true,
+                itemCount: 5,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  return TextInput(
+                      label: 'DropDown Search',
+                      backgroundColor: Colors.black12,
+                      icon: Icons.arrow_drop_down,
+                      hint: 'Select Date',
+                      colorIcon: Colors.black,
+                      controller: controller.selecteditemModel.isNotEmpty
+                          ? TextEditingController(
+                              text:
+                                  'Option ${[...controller.selecteditemModel.map((e) => e.id!)]}')
+                          : null,
+                      onSelect: ((val) {
+                        // TextInput.dropDownsearch();
 
-                    // Usage:
-                    // Misalkan kamu punya data seperti ini yang kamu dapat dari response api,
-                    // Atau kamu punya data berupa List<NamaModel>
-                    // List<Map> data = [
-                    //   { 'id': 1, 'item': 'Apple', 'enable': true },
-                    //   { 'id': 2, 'item': 'Bebek', 'enable': true },
-                    //   { 'id': 3, 'item': 'Ayam', 'enable': false },
-                    //   { 'id': 4, 'item': 'Bubur', 'enable': true },
-                    //   { 'id': 5, 'item': 'Nasi Goreng', 'enable': false },
-                    //   { 'id': 6, 'item': 'Capuchino', 'enable': true },
-                    //   { 'id': 7, 'item': 'Mango', 'enable': false },
-                    //   { 'id': 8, 'item': 'Banana', 'enable': true },
-                    //   { 'id': 9, 'item': 'Pizza', 'enable': true },
-                    //   { 'id': 10, 'item': 'Iga Bakar', 'enable': true },
-                    // ];
+                        // Usage:
+                        // Misalkan kamu punya data seperti ini yang kamu dapat dari response api,
+                        // Atau kamu punya data berupa List<NamaModel>
+                        // List<Map> data = [
+                        //   { 'id': 1, 'item': 'Apple', 'enable': true },
+                        //   { 'id': 2, 'item': 'Bebek', 'enable': true },
+                        //   { 'id': 3, 'item': 'Ayam', 'enable': false },
+                        //   { 'id': 4, 'item': 'Bubur', 'enable': true },
+                        //   { 'id': 5, 'item': 'Nasi Goreng', 'enable': false },
+                        //   { 'id': 6, 'item': 'Capuchino', 'enable': true },
+                        //   { 'id': 7, 'item': 'Mango', 'enable': false },
+                        //   { 'id': 8, 'item': 'Banana', 'enable': true },
+                        //   { 'id': 9, 'item': 'Pizza', 'enable': true },
+                        //   { 'id': 10, 'item': 'Iga Bakar', 'enable': true },
+                        // ];
 
-                    List<ItemModel> data = [
-                      ItemModel(id: 1, item: 'Apple', enable: true),
-                      ItemModel(id: 2, item: 'Bebek', enable: true),
-                      ItemModel(id: 3, item: 'Ayam', enable: false),
-                      ItemModel(id: 4, item: 'Bubur', enable: true),
-                      ItemModel(id: 5, item: 'Nasi Goreng', enable: false),
-                      ItemModel(id: 6, item: 'Capuchino', enable: false),
-                      ItemModel(id: 7, item: 'Mango', enable: true),
-                      ItemModel(id: 8, item: 'Pizza', enable: true),
-                      ItemModel(id: 9, item: 'Bakso Sapi', enable: true),
-                      ItemModel(id: 10, item: 'Telor Asin', enable: true),
-                      ItemModel(id: 11, item: 'Udang Saus Tiram', enable: false),
-                      ItemModel(id: 12, item: 'Ayam Bakar Madu', enable: false),
-                      ItemModel(id: 13, item: 'Iga Sapi Bakar', enable: true),
-                    ];
+                        List<ItemModel> data = [
+                          ItemModel(id: 1, item: 'Apple', enable: true),
+                          ItemModel(id: 2, item: 'Bebek', enable: true),
+                          ItemModel(id: 3, item: 'Ayam', enable: false),
+                          ItemModel(id: 4, item: 'Bubur', enable: true),
+                          ItemModel(id: 5, item: 'Nasi Goreng', enable: false),
+                          ItemModel(id: 6, item: 'Capuchino', enable: false),
+                          ItemModel(id: 7, item: 'Mango', enable: true),
+                          ItemModel(id: 8, item: 'Pizza', enable: true),
+                          ItemModel(id: 9, item: 'Bakso Sapi', enable: true),
+                          ItemModel(id: 10, item: 'Telor Asin', enable: true),
+                          ItemModel(
+                              id: 11, item: 'Udang Saus Tiram', enable: false),
+                          ItemModel(
+                              id: 12, item: 'Ayam Bakar Madu', enable: false),
+                          ItemModel(
+                              id: 13, item: 'Iga Sapi Bakar', enable: true),
+                        ];
 
-                    // 1. Get option yang ingin kamu tampilkan
-                    List<String> options = [...data.map((e) => e.item!)];
+                        // 1. Get option yang ingin kamu tampilkan
+                        List<String> options = [...data.map((e) => e.item!)];
 
-                    // 2. Get value (unique)
-                    List<int> values = [...data.map((e) => e.id!)];
+                        // 2. Get value (unique)
+                        List<int> values = [...data.map((e) => e.id!)];
 
-                    // 3. get id data yang disabled
-                    List disabled = [...data.where((e) => e.enable == false)].map((e) => e.id).toList();
+                        // 3. get id data yang disabled
+                        List disabled = [
+                          ...data.where((e) => e.enable == false)
+                        ].map((e) => e.id).toList();
 
-                    // 4. Call widget
-                    SelectOptionWidget(
-                      options: options,
-                      values: values,
-                      disabled: disabled,
-                      filterDelay: 500,
-                      viewOnly: 5,
-                    ).open((String? o, v) {
-                      ItemModel? result = data.firstWhere((e) => e.id == v, orElse: () => ItemModel());
-                      if (result.id != null) {
-                        // Do something!
-                        logg(result.item);
-                      }
-                    });
-                  })),
+                        // 4. Call widget
+                        SelectOptionWidget(
+                          options: options,
+                          values: values,
+                          disabled: disabled,
+                          filterDelay: 500,
+                          viewOnly: 5,
+                        ).open((String? o, v) {
+                          ItemModel? result = data.firstWhere((e) => e.id == v,
+                              orElse: () => ItemModel());
+                          if (result.id != null) {
+                            logg(controller.selecteditemModel[index],
+                                color: 'g');
+                            // Do something!
+                            if (controller.selecteditemModel.length < 5) {
+                              controller.selecteditemModel.add(result);
+                            } else {
+                              controller.selecteditemModel[index] = result;
+                            }
+                            logg(controller.selecteditemModel, color: 'g');
+
+                            // controller.selecteditemModel[index] = result;
+                            // controller.selecteditemModel[index].add({
+                            //   'id': result.id,
+                            //   'item': result.item,
+                            //   'enable': result.enable
+                            // });
+                          }
+                        });
+                      }));
+                },
+              ),
+
               SizedBox(height: 100),
             ],
           ),
